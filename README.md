@@ -17,4 +17,4 @@ Aliases : 'se'
 # Commandes présentes :
 
 season.*
-  - Donne toutes les permissions
+  > Donne toutes les permissions
