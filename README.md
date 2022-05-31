@@ -8,22 +8,10 @@ Aliases : 'se'
 # Commandes présentes :
 
 /seasonexo summon 
-  - Génére un coffre à des coordonnées aléatoires
-  
-/seasonexo delete 
-  - Supprime le coffre
-  
-/seasonexo addpos x y z 
-  - Ajoute une position dans le fichier de config
-  
-/seasonexo additem Material Pourcentage
-  - Ajoute un item et son pourcentage d'apparition dans le fichier de config
-  
-/seasonexo close
-  - Ferme le coffre au joueur qui l'a actuellement ouvert
+  > Génére un coffre à des coordonnées aléatoires
   
 /seasonexo reload
-  - Relance le plugin
+  > Relance le plugin
 
 
 # Commandes présentes :
