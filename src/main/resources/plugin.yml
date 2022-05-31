@@ -1,0 +1,9 @@
+name: SeasonExo
+version: Alpha Dev 1.0
+main: sunshine.seasonexo.SeasonExo
+author: 'Sunshine'
+api-version: 1.18
+commands:
+  seasonexo:
+    aliases: ['se']
+    description: Main command
