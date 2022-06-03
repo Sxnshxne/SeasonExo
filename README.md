@@ -3,6 +3,7 @@
 Plugin Minecraft (1.18.2) permettant l'apparition de coffres avec des items, messages et coordonnées 100% configurables
 
 Aliases : 'se'
+
 Fichiers de configuration : Langage JSON
 
 
