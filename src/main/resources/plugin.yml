@@ -7,3 +7,5 @@ commands:
   seasonexo:
     aliases: ['se']
     description: Main command
+  cmdse:
+    description: Only console command

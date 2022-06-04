@@ -7,15 +7,18 @@ import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import sunshine.seasonexo.datas.ItemDictManager;
-import sunshine.seasonexo.utils.MessagesManager;
+import sunshine.seasonexo.datas.ItemsManager;
+import sunshine.seasonexo.datas.MessagesManager;
 
 import java.util.*;
 
 public class ChestManager {
 
 
-    public static void SummonChest(Player player, int posX, int posY, int posZ) {
+    static List coordsActualChest = new ArrayList<>();
+
+
+    public static void SummonChest(Player player, Double posX, Double posY, Double posZ) {
 
         //place chest
         Location location = new Location(player.getWorld(), posX, posY, posZ);
@@ -27,7 +30,7 @@ public class ChestManager {
         Inventory inv = chest.getInventory();
 
         //randomiser
-        List itemList = itemChooser(ItemDictManager.getDictItem(), player);
+        List itemList = itemChooser(ItemsManager.getDictItem(), player);
 
         //add item on chest
         for (Object o : itemList) {
@@ -37,6 +40,27 @@ public class ChestManager {
 
     }
 
+    public static void DeleteChest(Player player, Double posX, Double posY, Double posZ) {
+
+        //delete chest
+        Location location = new Location(player.getWorld(), posX, posY, posZ);
+        location.getBlock().setType(Material.AIR);
+
+        coordsActualChest = new ArrayList<>();
+
+    }
+
+
+
+    public static List getCoordsActualChest() {
+        return coordsActualChest;
+    }
+
+    public static void setCoordsActualChest(Double x, Double y, Double z) {
+        coordsActualChest.add(x);
+        coordsActualChest.add(y);
+        coordsActualChest.add(z);
+    }
 
 
 
@@ -54,11 +78,11 @@ public class ChestManager {
             try {
                 itemStack = new ItemStack(Material.valueOf(key));
             } catch (IllegalArgumentException e) {
-                player.sendMessage(MessagesManager.Prefix() + "§cUn ou plusieurs items dans le fichier de configuration §6items.yml §cest mal orthographié");
+                player.sendMessage(MessagesManager.GetPrefix() + MessagesManager.GetSyntaxError());
                 itemStack = new ItemStack(Material.AIR);
             }
             
-            int purcentage = Integer.parseInt(String.valueOf(itemDict.get(key)));
+            double purcentage = Double.parseDouble(String.valueOf(itemDict.get(key)));
 
             if (purcentageDrop(purcentage)) { itemsList.add(itemStack); }
 
@@ -70,11 +94,11 @@ public class ChestManager {
 
 
     //manage purcentage of drop an item
-    private static boolean purcentageDrop(int percentage)
+    private static boolean purcentageDrop(double percentage)
     {
         Random random = new Random();
-        return random.nextInt(100) < percentage;
+        int i = (int) percentage;
+        return random.nextInt(100) < i;
     }
-
 
 }
