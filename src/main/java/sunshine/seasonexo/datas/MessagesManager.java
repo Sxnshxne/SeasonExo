@@ -2,6 +2,8 @@ package sunshine.seasonexo.datas;
 
 
 import java.io.FileNotFoundException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import static sunshine.seasonexo.utils.JsonManager.readFile;
@@ -13,71 +15,81 @@ public class MessagesManager {
     static String unknowCommand;
     static String missingPermission;
     static String pluginReloaded;
-    static String chestSummoning;
-    static String chestDeletingSuccesfully;
-    static String chestDeletingError;
+    static String chestAdminSummoning;
+    static String chestTimedSummoning;
+    static String chestAutoDeleting;
+    static String chestAdminDeletingSuccesfully;
+    static String chestAdminDeletingError;
     static String itemAddedToConfig;
     static String positionAddedToConfig;
     static String forceClosedChestForAdmin;
     static String forceClosedChestForPlayer;
+    static String chestFounded;
 
 
-
-    public static String GetPrefix() {
-        return prefix + " ";
-    }
 
     public static String GetSyntaxError() {
-        return syntaxError;
+        return prefix + " " + syntaxError;
     }
 
     public static String GetUnknowCommand() {
-        return unknowCommand;
+        return prefix + " "  + unknowCommand;
     }
 
     public static String GetMissingPermission() {
-        return missingPermission;
+        return prefix + " " + missingPermission;
     }
 
     public static String GetPluginReloaded() {
-        return pluginReloaded;
+        return prefix + " " + pluginReloaded;
     }
 
-    public static String GetChestDeletingSuccesfully() {
-        return chestDeletingSuccesfully;
+    public static String GetChestAutoDeleting() {
+        return prefix + " " + chestAutoDeleting;
     }
 
-    public static String GetChestDeletingError() {
-        return chestDeletingError;
+    public static String GetAdminChestDeletingSuccesfully() {
+        return prefix + " " + chestAdminDeletingSuccesfully;
+    }
+
+    public static String GetAdminChestDeletingError() {
+        return prefix + " " + chestAdminDeletingError;
     }
 
     public static String GetForceClosedChestForAdmin() {
-        return forceClosedChestForAdmin;
+        return prefix + " " + forceClosedChestForAdmin;
     }
 
     public static String GetForceClosedChestForPlayer() {
-        return forceClosedChestForPlayer;
+        return prefix + " " + forceClosedChestForPlayer;
     }
+
+    public static String GetChestFounded() { return prefix + " " + chestFounded; }
 
     public static String GetPositionAddedToConfig(Double x, Double y, Double z) {
 
         String formattedPositionAddedMessage = positionAddedToConfig.replace("{x}", String.valueOf(x));
         formattedPositionAddedMessage = formattedPositionAddedMessage.replace("{y}", String.valueOf(y));
         formattedPositionAddedMessage = formattedPositionAddedMessage.replace("{z}", String.valueOf(z));
-        return formattedPositionAddedMessage;
+        return prefix + " " + formattedPositionAddedMessage;
     }
 
-    public static String GetChestSummoning(Double x, Double y, Double z) {
-        String formattedChestSummoning = chestSummoning.replace("{x}", String.valueOf(x));
+    public static String GetChestAdminSummoning(Double x, Double y, Double z) {
+        String formattedChestSummoning = chestAdminSummoning.replace("{x}", String.valueOf(x));
         formattedChestSummoning = formattedChestSummoning.replace("{y}", String.valueOf(y));
         formattedChestSummoning = formattedChestSummoning.replace("{z}", String.valueOf(z));
-        return formattedChestSummoning;
+        return prefix + " " + formattedChestSummoning;
+    }
+
+    public static String GetChestTimedSummoning(int time) {
+        String formattedChestSummoning = chestTimedSummoning.replace("{time}", String.valueOf(time));
+        return prefix + " " + formattedChestSummoning;
     }
 
     public static String GetItemAddedToConfig(String material, double purcentage) {
         String formattedItemAddedMessage = itemAddedToConfig.replace("{material}", String.valueOf(material));
         formattedItemAddedMessage = formattedItemAddedMessage.replace("{purcentage}", String.valueOf(purcentage));
-        return formattedItemAddedMessage;
+        return prefix + " " + formattedItemAddedMessage;
     }
 
 
@@ -96,15 +108,20 @@ public class MessagesManager {
         missingPermission = configFormatter(hashMap.get("missing-permission"));
         pluginReloaded = configFormatter(hashMap.get("plugin-reloaded"));
 
-        chestSummoning = configFormatter(hashMap.get("chest-summoning"));
-        chestDeletingSuccesfully = configFormatter(hashMap.get("chest-deleting-succesfully"));
-        chestDeletingError = configFormatter(hashMap.get("chest-deleting-error"));
+        chestAdminSummoning = configFormatter(hashMap.get("chest-admin-summoning"));
+        chestTimedSummoning = configFormatter(hashMap.get("chest-timed-summoning"));
+        chestAutoDeleting = configFormatter(hashMap.get("chest-auto-deleting"));
+
+        chestAdminDeletingSuccesfully = configFormatter(hashMap.get("chest-admin-deleting-succesfully"));
+        chestAdminDeletingError = configFormatter(hashMap.get("chest-admin-deleting-error"));
 
         itemAddedToConfig = configFormatter(hashMap.get("item-added-to-config"));
         positionAddedToConfig = configFormatter(hashMap.get("position-added-to-config"));
 
         forceClosedChestForAdmin = configFormatter(hashMap.get("force-closed-chest-for-admin"));
         forceClosedChestForPlayer = configFormatter(hashMap.get("force-closed-chest-for-player"));
+
+        chestFounded = configFormatter(hashMap.get("chest-founded"));
     }
 
     public static void reloadMessages() {
@@ -112,8 +129,11 @@ public class MessagesManager {
     }
 
     private static String configFormatter(Object value) {
+
         String text = String.valueOf(value);
-        return text.replace("&", "§");
+        text = text.replace("&", "§");
+
+        return text;
     }
 
 }

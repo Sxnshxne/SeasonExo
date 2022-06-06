@@ -43,8 +43,10 @@ public class ItemsManager {
         //add old coords to list of coords
         for (int i=0; dictItem.size() > i; i++) {
             ArrayList arrayListFor = new ArrayList<>();
-            arrayListFor.add(dictItem.keySet().toArray()[i]);
-            arrayListFor.add(dictItem.get(dictItem.keySet().toArray()[i]));
+            Object iKey = dictItem.keySet().toArray()[i];
+
+            arrayListFor.add(iKey);
+            arrayListFor.add(dictItem.get(iKey));
 
             arrayListArrayList.add(arrayListFor);
         }
