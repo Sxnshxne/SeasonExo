@@ -15,7 +15,10 @@ public class JsonManager {
 
 
     public static HashMap readFile(String path) throws FileNotFoundException {
-        BufferedReader bufferedReader = new BufferedReader(new FileReader("plugins" + path));
+
+        FileInputStream fis = new FileInputStream("plugins" + path);
+        InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+        BufferedReader bufferedReader = new BufferedReader(isr);
 
         Gson gson = new GsonBuilder().create();
         HashMap<String, String> json = gson.fromJson(bufferedReader, HashMap.class);
