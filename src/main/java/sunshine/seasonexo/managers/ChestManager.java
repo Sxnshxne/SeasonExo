@@ -116,7 +116,7 @@ public class ChestManager {
 
 
     //create list of item who going on the chest
-    private static List itemChooser(Map<String,Integer> itemDict, Player player) {
+    private static List itemChooser(Map<String, Integer> itemDict, Player player) {
 
         List itemsList = new ArrayList();
 
