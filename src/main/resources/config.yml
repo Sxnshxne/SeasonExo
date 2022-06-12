@@ -1,7 +1,7 @@
+
 # # # # # # # # # # # # # # # # # # # # # # # #
 # CONFIGURATION FILE OF SEASONEXO by Sunshine #
 # # # # # # # # # # # # # # # # # # # # # # # #
-
 
 
 # # # # # #  # # # # # #
@@ -17,11 +17,13 @@ positions:
     - 300.0
     - 0.0
 
+cooldown-autodispawn: 5
+
+
 
 # # # # # # # # # # # # #
 # MESSAGE CONFIGURATION #
 # # # # # # # # # # # # #
-
 
 prefix: '&b&lSeason&a&lExo &7•'
 
