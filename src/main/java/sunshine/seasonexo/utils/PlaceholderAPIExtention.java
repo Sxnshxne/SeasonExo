@@ -4,12 +4,19 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import sunshine.seasonexo.chest.ChestManager;
+import sunshine.seasonexo.SeasonExo;
 import sunshine.seasonexo.listeners.ChestOpenListener;
 
-import java.util.Objects;
 
 public class PlaceholderAPIExtention extends PlaceholderExpansion {
+
+    private SeasonExo seasonExo;
+
+    public PlaceholderAPIExtention(SeasonExo seasonExo) {
+        this.seasonExo = seasonExo;
+    }
+
+
 
     @Override
     public @NotNull String getIdentifier() {
@@ -36,6 +43,10 @@ public class PlaceholderAPIExtention extends PlaceholderExpansion {
         return true;
     }
 
+
+
+
+
     @Override
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String params) {
 
@@ -43,32 +54,57 @@ public class PlaceholderAPIExtention extends PlaceholderExpansion {
         if (player == null) { return ""; }
 
 
-        if (params.equalsIgnoreCase("chestIsAppeared")) {
+        if (params.equals("chestIsAppeared")) {
 
-            if (ChestManager.getCoordsActualChest().isEmpty()) { return "Présent"; }
+            if (this.seasonExo.getChestManager().getCoordsActualChest().isEmpty()) { return "Présent"; }
             else { return "Absent"; }
 
         }
 
 
-        if (params.equalsIgnoreCase("timeBeforeDeleting")) {
+        if (params.equals("timeBeforeDeleting")) {
 
-            if (ChestManager.getCoordsActualChest().isEmpty()) {
+            if (this.seasonExo.getChestManager().getCoordsActualChest().isEmpty()) {
                 return "-1";
             }
             else {
-                return String.valueOf(ChestManager.getCountdown());
+                return String.valueOf(this.seasonExo.getRunTaskManager().getCountdown());
             }
 
         }
 
 
-        if (params.equalsIgnoreCase("chestHasBeenOpen")) {
+        if (params.equals("chestHasBeenOpen")) {
 
-            if (Objects.equals(ChestOpenListener.getPlayerWhoOpen(), "")) { return "Personne"; }
-            else { return ChestOpenListener.getPlayerWhoOpen(); }
+            if (ChestOpenListener.getPlayerWhoOpen() == "") { return "Personne"; }
+            else { ChestOpenListener.getPlayerWhoOpen(); }
 
         }
+
+
+        if (params.equals("chestCoordsX")) {
+
+            if (this.seasonExo.getChestManager().getCoordsActualChest().isEmpty()) { return "Null"; }
+            else { return this.seasonExo.getChestManager().getCoordsActualChest().get(0).toString(); }
+
+        }
+
+
+        if (params.equals("chestCoordsY")) {
+
+            if (this.seasonExo.getChestManager().getCoordsActualChest().isEmpty()) { return "Null"; }
+            else { return this.seasonExo.getChestManager().getCoordsActualChest().get(1).toString(); }
+
+        }
+
+
+        if (params.equals("chestCoordsZ")) {
+
+            if (this.seasonExo.getChestManager().getCoordsActualChest().isEmpty()) { return "Null"; }
+            else { return this.seasonExo.getChestManager().getCoordsActualChest().get(2).toString(); }
+
+        }
+
 
         return super.onPlaceholderRequest(player, params);
     }

@@ -1,0 +1,48 @@
+# # # # # # # # # # # # # # # # # # # # # # # #
+# CONFIGURATION FILE OF SEASONEXO by Sunshine #
+# # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+# # # # # #  # # # # # #
+# PLUGIN CONFIGURATION #
+# # # # # #  # # # # # #
+
+items:
+  - - DIAMOND
+    - 100
+
+positions:
+  - - 0.0
+    - 300.0
+    - 0.0
+
+
+# # # # # # # # # # # # #
+# MESSAGE CONFIGURATION #
+# # # # # # # # # # # # #
+
+
+prefix: '&b&lSeason&a&lExo &7•'
+
+syntax-error: '&cErreur de syntaxe, veuillez vérifier la syntaxe et réessayer'
+unknow-command: '&cCommande inconnue, veuillez vérifier la syntaxe et réessayer'
+missing-permission: '&cVous n''avez pas la permission d''éxecuter cette commande'
+plugin-reloaded: '&aPlugin rechargé avec succès'
+
+chest-admin-summoning: '&fCoffre généré en &e%season_chestCoordsX%&f, &e%season_chestCoordsY&f,
+  &e%season_chestCoordsZ&f'
+chest-timed-summoning: '&fUn coffre est apparu ! Il disparaitra dans &a%season_timeBeforeDeleting%
+  &fsecondes'
+chest-auto-deleting: '&fLe coffre vient de disparaitre'
+
+chest-admin-deleting-succesfully: '&fCoffre supprimé avec succès'
+chest-admin-deleting-error: '&cAucun coffre existant sur le monde'
+
+item-added-to-config: '&fL''item a été ajouté avec succès'
+position-added-to-config: '&fLes coordonnées ont été ajouté avec succès'
+
+force-closed-chest-for-admin: '&fCoffre fermé avec succès'
+force-closed-chest-for-player: '&fCoffre fermé par un administrateur'
+
+chest-founded: '&fLe coffre a été trouvé !'

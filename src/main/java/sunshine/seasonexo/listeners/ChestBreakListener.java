@@ -8,33 +8,41 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import sunshine.seasonexo.chest.ChestManager;
-import sunshine.seasonexo.commands.AdminsCommands;
-import sunshine.seasonexo.datas.MessagesManager;
+import sunshine.seasonexo.SeasonExo;
 
 import java.util.List;
 
 public class ChestBreakListener implements Listener {
 
 
+    private SeasonExo seasonExo;
+
+    public ChestBreakListener(SeasonExo seasonExo) {
+        this.seasonExo = seasonExo;
+    }
+
+
     @EventHandler
     public void onClick(BlockBreakEvent event) {
 
-        Player player = (Player) event.getPlayer();
+        Player player = event.getPlayer();
         Block block = event.getBlock();
 
 
         if (block.getType() == Material.CHEST) {
 
-            List coordsActualChest = ChestManager.getCoordsActualChest();
+            List<Double> coordsActualChest = this.seasonExo.getChestManager().getCoordsActualChest();
 
             if (coordsActualChest.isEmpty()) { return; }
 
-            if (block.getState().getLocation().getX() == (Double) coordsActualChest.get(0) && block.getState().getLocation().getY() == (Double) coordsActualChest.get(1) && block.getState().getLocation().getZ() == (Double) coordsActualChest.get(2)) {
-                AdminsCommands.cancelAutoDispawn();
-                ChestManager.DeleteChest(player, (Double) coordsActualChest.get(0), (Double) coordsActualChest.get(1), (Double) coordsActualChest.get(2));
-                Bukkit.broadcastMessage(MessagesManager.GetChestFounded());
-                ChestManager.reloadCountdown();
+            if (block.getState().getLocation().getX() == coordsActualChest.get(0)
+                    && block.getState().getLocation().getY() == coordsActualChest.get(1)
+                    && block.getState().getLocation().getZ() == coordsActualChest.get(2)) {
+
+                this.seasonExo.getRunTaskManager().cancelAutoDispawn();
+                this.seasonExo.getRunTaskManager().reloadCountdown();
+                this.seasonExo.getChestManager().DeleteChest(player, coordsActualChest.get(0), coordsActualChest.get(1), coordsActualChest.get(2));
+                Bukkit.broadcastMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","chest-founded", true));
 
             }
 

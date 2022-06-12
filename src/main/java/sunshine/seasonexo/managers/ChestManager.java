@@ -1,6 +1,5 @@
-package sunshine.seasonexo.chest;
+package sunshine.seasonexo.managers;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -8,25 +7,23 @@ import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import sunshine.seasonexo.SeasonExo;
-import sunshine.seasonexo.datas.ItemsManager;
-import sunshine.seasonexo.datas.MessagesManager;
 
-import java.io.FileNotFoundException;
 import java.util.*;
 
 public class ChestManager {
 
 
-    static List coordsActualChest = new ArrayList<>();
+    private SeasonExo seasonExo;
 
-    public ChestManager() throws FileNotFoundException {
+    public ChestManager(SeasonExo seasonExo) {
+        this.seasonExo = seasonExo;
     }
 
 
-    public static void SummonChest(Player player, Double posX, Double posY, Double posZ) {
+    List<Double> coordsActualChest = new ArrayList<>();
+
+    public void SummonChest(Player player, Double posX, Double posY, Double posZ) {
 
         //place chest
         Location location = new Location(player.getWorld(), posX, posY, posZ);
@@ -44,7 +41,7 @@ public class ChestManager {
         Inventory inv = chest.getInventory();
 
         //randomiser
-        List itemList = itemChooser(ItemsManager.getDictItem(), player);
+        List itemList = this.itemChooser();
 
         //add item on chest
         for (Object o : itemList) {
@@ -55,7 +52,7 @@ public class ChestManager {
     }
 
     //delete chest
-    public static void DeleteChest(Player player, Double posX, Double posY, Double posZ) {
+    public void DeleteChest(Player player, Double posX, Double posY, Double posZ) {
 
         //delete chest
         Location location = new Location(player.getWorld(), posX, posY, posZ);
@@ -66,45 +63,15 @@ public class ChestManager {
     }
 
 
-    //countdown
-    static int countdown = 31;
-    static BukkitTask task;
-
-    public static void startCountdown() {
-         task = new BukkitRunnable() {
-            public void run() {
-
-                if (countdown == 0) {
-                    reloadCountdown();
-                }
-
-                countdown--;
-
-            }
-
-        }.runTaskTimer(SeasonExo.plugin(), 0L, 20L);
-    }
-
-    public static int getCountdown() {
-        return countdown;
-    }
-
-    public static void reloadCountdown() {
-        Bukkit.getScheduler().cancelTask(task.getTaskId());
-        countdown = 31;
-    }
-
-
-
 
 
     //get coords of placed chest
-    public static List getCoordsActualChest() {
+    public List<Double> getCoordsActualChest() {
         return coordsActualChest;
     }
 
     //set coords of placed chest
-    public static void setCoordsActualChest(Double x, Double y, Double z) {
+    public void setCoordsActualChest(Double x, Double y, Double z) {
         coordsActualChest.add(x);
         coordsActualChest.add(y);
         coordsActualChest.add(z);
@@ -114,40 +81,94 @@ public class ChestManager {
 
 
 
-
     //create list of item who going on the chest
-    private static List itemChooser(Map<String, Integer> itemDict, Player player) {
+    private List itemChooser() {
 
-        List itemsList = new ArrayList();
+        List itemsListToChest = new ArrayList();
 
-        for ( String key : itemDict.keySet() ) {
+        this.itemsList.forEach((n) -> {
+            if (purcentageDrop((Integer) n.get(1))) {
 
-            ItemStack itemStack = null;
-
-            try {
-                itemStack = new ItemStack(Material.valueOf(key));
-            } catch (IllegalArgumentException e) {
-                player.sendMessage(MessagesManager.GetSyntaxError());
-                itemStack = new ItemStack(Material.AIR);
+                ItemStack item = new ItemStack(Material.valueOf((String) n.get(0)), 1);
+                itemsListToChest.add(item);
             }
-            
-            double purcentage = Double.parseDouble(String.valueOf(itemDict.get(key)));
+        });
 
-            if (purcentageDrop(purcentage)) { itemsList.add(itemStack); }
-
-        }
-
-        return itemsList;
+        return itemsListToChest;
 
     }
 
 
     //manage purcentage of drop an item
-    private static boolean purcentageDrop(double percentage)
-    {
+    private boolean purcentageDrop(Integer percentage) {
+
         Random random = new Random();
-        int i = (int) percentage;
-        return random.nextInt(100) < i;
+        return random.nextInt(100) < percentage;
+
+    }
+
+
+
+
+
+
+    // --- ITEMS MANAGER ---//
+    private List<List> itemsList;
+
+
+    public void initItemList() {
+        this.itemsList = this.seasonExo.getConfigManager().getList("config.yml", "items");
+    }
+
+    private List<List> getItemsList() {
+        return itemsList;
+    }
+
+    public void addToItemsList(String material, int purcentage) {
+        List newItem = new ArrayList();
+        newItem.add(material);
+        newItem.add(purcentage);
+        this.itemsList.add(newItem);
+        this.seasonExo.getConfigManager().save();
+    }
+
+
+
+
+
+
+    // --- POSITION MANAGER ---//
+    private List<List> positionsList;
+
+    public void initPositionsList() {
+        this.positionsList = this.seasonExo.getConfigManager().getList("config.yml", "positions");
+    }
+
+    private List<List> getPositionsList() {
+        return positionsList;
+    }
+
+    public List getRandomPositionsInList() {
+
+        Random random = new Random();
+        int randomValue = random.nextInt(positionsList.size());
+
+        List coords = new ArrayList<>();
+
+        coords.add(positionsList.get(randomValue).get(0));
+        coords.add(positionsList.get(randomValue).get(1));
+        coords.add(positionsList.get(randomValue).get(2));
+
+        return coords;
+    }
+
+    public void addToPositionsList(Double X, Double Y, Double Z) {
+        List newPosition = new ArrayList();
+        newPosition.add(X);
+        newPosition.add(Y);
+        newPosition.add(Z);
+        this.positionsList.add(newPosition);
+        this.seasonExo.getConfigManager().save();
     }
 
 }

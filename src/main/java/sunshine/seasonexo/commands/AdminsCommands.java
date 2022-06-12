@@ -1,25 +1,24 @@
 package sunshine.seasonexo.commands;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 import sunshine.seasonexo.SeasonExo;
-import sunshine.seasonexo.chest.ChestManager;
-import sunshine.seasonexo.datas.ItemsManager;
-import sunshine.seasonexo.datas.PositionsManager;
-import sunshine.seasonexo.datas.MessagesManager;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.*;
 
 public class AdminsCommands implements CommandExecutor {
 
-    static BukkitTask taskId1;
-    static BukkitTask taskId2;
+
+    private final SeasonExo seasonExo;
+
+    public AdminsCommands(SeasonExo seasonExo) {
+        this.seasonExo = seasonExo;
+    }
+
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -31,26 +30,32 @@ public class AdminsCommands implements CommandExecutor {
 
             if (args.length == 0) {
 
-                player.sendMessage(MessagesManager.GetUnknowCommand());
+                player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","syntax_error", true));
 
 
 
 
 
-            } else if (Objects.equals(args[0], "summon")) {
+            } else if (args[0].equals("summon")) {
 
-                List coordsList = ChestManager.getCoordsActualChest();
+                List coordsList = this.seasonExo.getChestManager().getCoordsActualChest();
 
                 if (coordsList.isEmpty()) {
 
-                    List coords = PositionsManager.getRandomPositions();
-                    coords = Arrays.asList(coords.toArray());
+                    List<Double> coords = this.seasonExo.getChestManager().getRandomPositionsInList();
 
-                    ChestManager.SummonChest(player, (Double) coords.get(0), (Double) coords.get(1), (Double) coords.get(2));
-                    ChestManager.setCoordsActualChest((Double) coords.get(0), (Double) coords.get(1), (Double) coords.get(2));
-                    player.sendMessage(MessagesManager.GetChestAdminSummoning((Double) coords.get(0), (Double) coords.get(1), (Double) coords.get(2)));
+                    this.seasonExo.getChestManager().SummonChest(player, coords.get(0), coords.get(1), coords.get(2));
+                    this.seasonExo.getChestManager().setCoordsActualChest(coords.get(0), coords.get(1), coords.get(2));
+                    this.seasonExo.getRunTaskManager().startAutoDispawn(player, coords);
 
-                    startAutoDispawn(player, coords);
+                    String message = this.seasonExo.getConfigManager().getFormatedString("config.yml","chest-admin-summoning", true);
+                    message = message.replace("%seasonexo_chestCoordsX%", PlaceholderAPI.setPlaceholders(player, "%seasonexo_chestCoordsX%"));
+                    message = message.replace("%seasonexo_chestCoordsY%", PlaceholderAPI.setPlaceholders(player, "%seasonexo_chestCoordsY%"));
+                    message = message.replace("%seasonexo_chestCoordsZ%", PlaceholderAPI.setPlaceholders(player, "%seasonexo_chestCoordsZ%"));
+
+                    player.sendMessage(message);
+
+
 
 
 
@@ -61,58 +66,53 @@ public class AdminsCommands implements CommandExecutor {
 
 
 
-            } else if (Objects.equals(args[0], "reload")) {
+            } else if (args[0].equals("reload")) {
 
-                try {
-
-                    ItemsManager.reloadDict();
-                    PositionsManager.reloadListOfPositions();
-                    MessagesManager.reloadMessages();
-                    player.sendMessage(MessagesManager.GetPluginReloaded());
-
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
+                this.seasonExo.getConfigManager().reload();
+                player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","plugin-reloaded", true));
 
 
 
 
 
-            } else if (Objects.equals(args[0], "delete")) {
-                List coordsList = ChestManager.getCoordsActualChest();
+
+
+            } else if (args[0].equals("delete")) {
+                List<Double> coordsList = this.seasonExo.getChestManager().getCoordsActualChest();
 
                 if (!coordsList.isEmpty()) {
-                    ChestManager.DeleteChest(player, (Double) coordsList.get(0), (Double) coordsList.get(1), (Double) coordsList.get(2));
-                    player.sendMessage(MessagesManager.GetAdminChestDeletingSuccesfully());
-                    cancelAutoDispawn();
-                    ChestManager.reloadCountdown();
+                    this.seasonExo.getChestManager().DeleteChest(player, coordsList.get(0), coordsList.get(1), coordsList.get(2));
+                    this.seasonExo.getRunTaskManager().cancelAutoDispawn();
+                    this.seasonExo.getRunTaskManager().reloadCountdown();
+
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","chest-admin-deleting-succesfully", true));
                 } else {
-                    player.sendMessage(MessagesManager.GetAdminChestDeletingError());
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","chest-admin-deleting-error", true));
                 }
 
 
 
 
 
-            } else if (Objects.equals(args[0], "additem")) {
+            } else if (args[0].equals("additem")) {
 
                 try {
 
                     String material = args[1];
-                    double purcentage = Double.parseDouble(args[2]);
+                    int purcentage = Integer.parseInt(args[2]);
 
-                    ItemsManager.addItemToFile(material, purcentage);
-                    player.sendMessage(MessagesManager.GetItemAddedToConfig(material, purcentage));
+                    this.seasonExo.getChestManager().addToItemsList(material, purcentage);
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","item-added-to-config", true));
 
-                } catch (IOException e) {
-                    player.sendMessage(MessagesManager.GetSyntaxError());
+                } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","syntax-error", true));
                 }
 
 
 
 
 
-            } else if (Objects.equals(args[0], "addpos")) {
+            } else if (args[0].equals("addpos")) {
 
                 try {
 
@@ -120,22 +120,32 @@ public class AdminsCommands implements CommandExecutor {
                     double posY = Double.parseDouble(args[2]);
                     double posZ = Double.parseDouble(args[3]);
 
-                    PositionsManager.addPositionToFile(posX, posY, posZ);
-                    player.sendMessage(MessagesManager.GetPositionAddedToConfig(posX, posY, posZ));
+                    this.seasonExo.getChestManager().addToPositionsList(posX, posY, posZ);
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","position-added-to-config", true));
 
-                } catch (NumberFormatException | IOException | ArrayIndexOutOfBoundsException e) {
-                    player.sendMessage(MessagesManager.GetSyntaxError());
+                } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","syntax-error", true));
                 }
 
 
 
 
 
-            } else if (Objects.equals(args[0], "close")) {
+            } else if (args[0].equals("close")) {
 
-                Objects.requireNonNull(Bukkit.getPlayer(args[1])).closeInventory();
-                Objects.requireNonNull(Bukkit.getPlayer(args[1])).sendMessage(MessagesManager.GetForceClosedChestForPlayer());
-                player.sendMessage(MessagesManager.GetForceClosedChestForAdmin());
+                if (args.length == 2) {
+
+                    try {
+                        Bukkit.getPlayer(args[1]).closeInventory();
+                        Bukkit.getPlayer(args[1]).sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","force-closed-chest-for-player", true));
+                        player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","force-closed-chest-for-admin", true));
+                    } catch (NullPointerException e) {
+                        player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","prefix", false) + "§cPseudo inccorect");
+                    }
+
+                } else {
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","syntax-error", true));
+                }
 
 
 
@@ -143,44 +153,17 @@ public class AdminsCommands implements CommandExecutor {
 
             } else {
 
-                player.sendMessage(MessagesManager.GetUnknowCommand());
+                player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","syntax-error", true));
 
             }
 
         } else {
 
-            player.sendMessage(MessagesManager.GetMissingPermission());
+            player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","unknow-command", true));
 
         }
 
         return false;
-    }
-
-
-    private static void startAutoDispawn(Player player, List coords) {
-        Bukkit.broadcastMessage(MessagesManager.GetChestTimedSummoning(30));
-        ChestManager.startCountdown();
-
-        taskId1 = Bukkit.getScheduler().runTaskLater(SeasonExo.plugin(), () ->
-                Bukkit.broadcastMessage(MessagesManager.GetChestTimedSummoning(10)), 20L * 20L);
-
-        List finalCoords = coords;
-
-        taskId2 = Bukkit.getScheduler().runTaskLater(SeasonExo.plugin(), () -> {
-
-            Bukkit.broadcastMessage(MessagesManager.GetChestAutoDeleting());
-            ChestManager.DeleteChest(player, (Double) finalCoords.get(0), (Double) finalCoords.get(1), (Double) finalCoords.get(2));
-            ChestManager.reloadCountdown();
-
-        }, 20L * 30L);
-
-    }
-
-
-    public static void cancelAutoDispawn() {
-        Bukkit.getScheduler().cancelTask(taskId1.getTaskId());
-        Bukkit.getScheduler().cancelTask(taskId2.getTaskId());
-        ChestManager.reloadCountdown();
     }
 
 }
