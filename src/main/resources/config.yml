@@ -32,9 +32,9 @@ unknow-command: '&cCommande inconnue, veuillez vérifier la syntaxe et réessaye
 missing-permission: '&cVous n''avez pas la permission d''éxecuter cette commande'
 plugin-reloaded: '&aPlugin rechargé avec succès'
 
-chest-admin-summoning: '&fCoffre généré en &e%season_chestCoordsX%&f, &e%season_chestCoordsY&f,
-  &e%season_chestCoordsZ&f'
-chest-timed-summoning: '&fUn coffre est apparu ! Il disparaitra dans &a%season_timeBeforeDeleting%
+chest-admin-summoning: '&fCoffre généré en &e%seasonexo_chestCoordsX%&f, &e%seasonexo_chestCoordsY%&f,
+  &e%seasonexo_chestCoordsZ%&f'
+chest-timed-summoning: '&fUn coffre est apparu ! Il disparaitra dans &a%seasonexo_timeBeforeDeleting%
   &fsecondes'
 chest-auto-deleting: '&fLe coffre vient de disparaitre'
 
