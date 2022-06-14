@@ -35,7 +35,7 @@ public final class SeasonExo extends JavaPlugin {
 
 
         //Commands register
-        Objects.requireNonNull(getCommand("seasonexo")).setExecutor(new AdminsCommands(this));
+        getCommand("seasonexo").setExecutor(new AdminsCommands(this));
 
 
 

@@ -15,13 +15,14 @@ public class ChestManager {
 
 
     private SeasonExo seasonExo;
+    private List<Double> coordsActualChest;
 
     public ChestManager(SeasonExo seasonExo) {
         this.seasonExo = seasonExo;
+        this.coordsActualChest = new ArrayList<>();
     }
 
 
-    List<Double> coordsActualChest = new ArrayList<>();
 
     public void SummonChest(Player player, Double posX, Double posY, Double posZ) {
 
