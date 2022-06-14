@@ -117,7 +117,7 @@ public class ChestManager {
 
 
     public void initItemList() {
-        this.itemsList = this.seasonExo.getConfigManager().getList("config.yml", "items");
+        this.itemsList = this.seasonExo.getConfigManager().getList("message.yml", "items");
     }
 
     private List<List> getItemsList() {
@@ -141,7 +141,7 @@ public class ChestManager {
     private List<List> positionsList;
 
     public void initPositionsList() {
-        this.positionsList = this.seasonExo.getConfigManager().getList("config.yml", "positions");
+        this.positionsList = this.seasonExo.getConfigManager().getList("message.yml", "positions");
     }
 
     private List<List> getPositionsList() {

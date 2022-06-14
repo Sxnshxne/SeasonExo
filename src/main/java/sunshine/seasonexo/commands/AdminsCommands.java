@@ -30,7 +30,7 @@ public class AdminsCommands implements CommandExecutor {
 
             if (args.length == 0) {
 
-                player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","syntax_error", true));
+                player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","syntax_error", true));
 
 
 
@@ -48,7 +48,7 @@ public class AdminsCommands implements CommandExecutor {
                     this.seasonExo.getChestManager().setCoordsActualChest(coords.get(0), coords.get(1), coords.get(2));
                     this.seasonExo.getRunTaskManager().startAutoDispawn(player, coords);
 
-                    String message = this.seasonExo.getConfigManager().getFormatedString("config.yml","chest-admin-summoning", true);
+                    String message = this.seasonExo.getConfigManager().getFormatedString("message.yml","chest-admin-summoning", true);
                     message = message.replace("%seasonexo_chestCoordsX%", PlaceholderAPI.setPlaceholders(player, "%seasonexo_chestCoordsX%"));
                     message = message.replace("%seasonexo_chestCoordsY%", PlaceholderAPI.setPlaceholders(player, "%seasonexo_chestCoordsY%"));
                     message = message.replace("%seasonexo_chestCoordsZ%", PlaceholderAPI.setPlaceholders(player, "%seasonexo_chestCoordsZ%"));
@@ -69,7 +69,7 @@ public class AdminsCommands implements CommandExecutor {
             } else if (args[0].equals("reload")) {
 
                 this.seasonExo.getConfigManager().reload();
-                player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","plugin-reloaded", true));
+                player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","plugin-reloaded", true));
 
 
 
@@ -85,9 +85,9 @@ public class AdminsCommands implements CommandExecutor {
                     this.seasonExo.getRunTaskManager().cancelAutoDispawn();
                     this.seasonExo.getRunTaskManager().reloadCountdown();
 
-                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","chest-admin-deleting-succesfully", true));
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","chest-admin-deleting-succesfully", true));
                 } else {
-                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","chest-admin-deleting-error", true));
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","chest-admin-deleting-error", true));
                 }
 
 
@@ -102,10 +102,10 @@ public class AdminsCommands implements CommandExecutor {
                     int purcentage = Integer.parseInt(args[2]);
 
                     this.seasonExo.getChestManager().addToItemsList(material, purcentage);
-                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","item-added-to-config", true));
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","item-added-to-config", true));
 
                 } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","syntax-error", true));
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","syntax-error", true));
                 }
 
 
@@ -121,10 +121,10 @@ public class AdminsCommands implements CommandExecutor {
                     double posZ = Double.parseDouble(args[3]);
 
                     this.seasonExo.getChestManager().addToPositionsList(posX, posY, posZ);
-                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","position-added-to-config", true));
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","position-added-to-config", true));
 
                 } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","syntax-error", true));
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","syntax-error", true));
                 }
 
 
@@ -137,14 +137,14 @@ public class AdminsCommands implements CommandExecutor {
 
                     try {
                         Bukkit.getPlayer(args[1]).closeInventory();
-                        Bukkit.getPlayer(args[1]).sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","force-closed-chest-for-player", true));
-                        player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","force-closed-chest-for-admin", true));
+                        Bukkit.getPlayer(args[1]).sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","force-closed-chest-for-player", true));
+                        player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","force-closed-chest-for-admin", true));
                     } catch (NullPointerException e) {
-                        player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","prefix", false) + "§cPseudo inccorect");
+                        player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","prefix", false) + "§cPseudo inccorect");
                     }
 
                 } else {
-                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","syntax-error", true));
+                    player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","syntax-error", true));
                 }
 
 
@@ -153,13 +153,13 @@ public class AdminsCommands implements CommandExecutor {
 
             } else {
 
-                player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","syntax-error", true));
+                player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","syntax-error", true));
 
             }
 
         } else {
 
-            player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","unknow-command", true));
+            player.sendMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","unknow-command", true));
 
         }
 

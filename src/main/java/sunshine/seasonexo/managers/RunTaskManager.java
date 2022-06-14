@@ -25,7 +25,7 @@ public class RunTaskManager {
 
     public void startAutoDispawn(Player player, List<Double> coords) {
 
-        String message = this.seasonExo.getConfigManager().getFormatedString("config.yml","chest-timed-summoning",true);
+        String message = this.seasonExo.getConfigManager().getFormatedString("message.yml","chest-timed-summoning",true);
 
         message = message.replace("%seasonexo_timeBeforeDeleting%", PlaceholderAPI.setPlaceholders(player, "%seasonexo_timeBeforeDeleting%"));
         Bukkit.broadcastMessage(message);
@@ -35,7 +35,7 @@ public class RunTaskManager {
 
         this.taskId1 = Bukkit.getScheduler().runTaskLater(seasonExo, () -> {
 
-            String message20S = this.seasonExo.getConfigManager().getFormatedString("config.yml","chest-timed-summoning",true);
+            String message20S = this.seasonExo.getConfigManager().getFormatedString("message.yml","chest-timed-summoning",true);
             message20S = message20S.replace("%seasonexo_timeBeforeDeleting%", PlaceholderAPI.setPlaceholders(player, "%seasonexo_timeBeforeDeleting%"));
             Bukkit.broadcastMessage(message20S);
 
@@ -44,7 +44,7 @@ public class RunTaskManager {
 
         this.taskId2 = Bukkit.getScheduler().runTaskLater(seasonExo, () -> {
 
-            Bukkit.broadcastMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","chest-auto-deleting",true));
+            Bukkit.broadcastMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","chest-auto-deleting",true));
             this.seasonExo.getChestManager().DeleteChest(player, coords.get(0), coords.get(1), coords.get(2));
             this.reloadCountdown();
 
@@ -96,11 +96,11 @@ public class RunTaskManager {
 
     public void autoDispawnAfterOpening(Player player, List<Double> coordsActualChest) {
 
-        Object cooldown = this.seasonExo.getConfigManager().getInt("config.yml", "cooldown-autodispawn");
+        Object cooldown = this.seasonExo.getConfigManager().getInt("message.yml", "cooldown-autodispawn");
         String cooldownString = String.valueOf(cooldown).replace(".0", "");
 
         Bukkit.broadcastMessage("§cLe coffre disparaitra dans §e" + cooldownString + " §csecondes");
-        Bukkit.broadcastMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","chest-founded",true));
+        Bukkit.broadcastMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","chest-founded",true));
 
         this.cancelAutoDispawn();
         this.reloadCountdown();

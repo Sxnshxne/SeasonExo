@@ -42,7 +42,7 @@ public class ChestBreakListener implements Listener {
                 this.seasonExo.getRunTaskManager().cancelAutoDispawn();
                 this.seasonExo.getRunTaskManager().reloadCountdown();
                 this.seasonExo.getChestManager().DeleteChest(player, coordsActualChest.get(0), coordsActualChest.get(1), coordsActualChest.get(2));
-                Bukkit.broadcastMessage(this.seasonExo.getConfigManager().getFormatedString("config.yml","chest-founded", true));
+                Bukkit.broadcastMessage(this.seasonExo.getConfigManager().getFormatedString("message.yml","chest-founded", true));
 
             }
 

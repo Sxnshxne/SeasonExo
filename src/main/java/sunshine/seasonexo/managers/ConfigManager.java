@@ -99,7 +99,7 @@ public class ConfigManager {
         text = text.replace("&", "§");
 
         if (addPrefix) {
-            String prefix = this.getFileConfiguration("config.yml").getString("prefix");
+            String prefix = this.getFileConfiguration("message.yml").getString("prefix");
             prefix = prefix.replace("&", "§");
 
             return prefix + " " + text;
